@@ -1,10 +1,10 @@
 # Sistema Agente IA - Gerenciamento Escolar
 
-## 🎯 Descrição
+## Descrição
 
 Sistema inteligente de gerenciamento acadêmico usando FastMCP e LLM (Ollama/llama3.2). Permite que alunos consultem suas informações acadêmicas, notas, matérias, pagamentos e criem requerimentos de forma conversacional.
 
-## 🚀 Início Rápido
+## Início Rápido
 
 ### Opção 1: Executar script automático (Recomendado)
 ```batch
@@ -30,7 +30,7 @@ cd agente-ia
 python agente_ia_inteligente.py
 ```
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 - Python 3.10+
 - Packages instalados (já configurados no ambiente virtual):
@@ -66,7 +66,7 @@ python agente_ia_inteligente.py
 - "quero adicionar a matéria ALG-101"
 ```
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 AgenteIa/
@@ -80,7 +80,7 @@ AgenteIa/
 └── README.md                      # Este arquivo
 ```
 
-## 🧪 Testando o Sistema
+## Testando o Sistema
 
 Execute o script de teste para verificar a conectividade:
 ```batch
@@ -88,7 +88,7 @@ cd agente-ia
 python test_connection.py
 ```
 
-## 🌐 Endpoints do Servidor
+## Endpoints do Servidor
 
 - `GET /health` - Verificação de saúde do servidor
 - `POST /` - Endpoint JSON-RPC para chamadas de ferramentas
@@ -109,7 +109,7 @@ DB_PATH = r'C:\Users\...\escola.db'  # Caminho do banco
 PORT = 8000  # Porta do servidor
 ```
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Servidor não inicia
 - Verifique se a porta 8000 está livre: `netstat -ano | findstr :8000`
@@ -124,12 +124,12 @@ PORT = 8000  # Porta do servidor
 - Certifique-se de que o servidor MCP está rodando
 - Verifique se está usando a URL correta: `http://localhost:8000`
 
-## 📝 Logs
+## Logs
 
 - Servidor MCP: `agente-ia/mcp_server.log`
 - Saída do agente: console
 
-## 🎓 Dados de Teste
+## Dados de Teste
 
 IDs de alunos disponíveis no banco:
 - ID: 1, 2, 3, etc.
@@ -140,14 +140,14 @@ cd agente-ia
 python -c "import sqlite3; conn = sqlite3.connect('../escola.db'); print(conn.execute('SELECT id, nome_completo FROM alunos LIMIT 5').fetchall())"
 ```
 
-## 📞 Suporte
+## Suporte
 
 Para problemas ou dúvidas, verifique:
 1. Logs do servidor
 2. Execute `test_connection.py`
 3. Verifique se o banco de dados existe
 
-## 🔄 Atualizações
+## Atualizações
 
 Para atualizar dependências:
 ```batch
