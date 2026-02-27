@@ -97,7 +97,7 @@ Após iniciar o sistema, digite no Agente IA:
 - "quero adicionar a matéria ALG-101"
 ```
 
-## 📞 Suporte
+## Suporte
 
 Ver documentação completa em:
 - `README.md` - Documentação completa
