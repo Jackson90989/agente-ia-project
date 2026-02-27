@@ -1,6 +1,6 @@
-# 🚀 Guia Rápido - Sistema Agente IA
+# Guia Rápido - Sistema Agente IA
 
-## 📦 Instalação (primeira vez)
+## Instalação (primeira vez)
 
 ```batch
 instalar_completo.bat
@@ -11,7 +11,7 @@ Este script vai:
 - Instalar todas as dependências
 - Verificar se tudo está funcionando
 
-## ▶️ Iniciar o Sistema
+## Iniciar o Sistema
 
 ### Opção 1: Sistema Completo (recomendado)
 ```batch
@@ -28,14 +28,14 @@ iniciar_sistema_unico.bat
 ```
 Abre apenas o Agente IA em um terminal.
 
-## 🛑 Parar o Sistema
+## Parar o Sistema
 
 ```batch
 parar_sistema.bat
 ```
 Para todos os processos relacionados ao sistema.
 
-## 📋 Ordem de Execução
+## Ordem de Execução
 
 1. **Primeira vez:**
    ```batch
@@ -57,7 +57,7 @@ Para todos os processos relacionados ao sistema.
    ```
    OU simplesmente feche os terminais
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### Erro: "Ambiente virtual não encontrado"
 ```batch
@@ -75,7 +75,7 @@ iniciar_sistema.bat
 2. Inicie novamente: `iniciar_sistema.bat`
 3. Aguarde 10 segundos para tudo carregar
 
-## 📂 Estrutura de Scripts
+## Estrutura de Scripts
 
 | Script | Função |
 |--------|--------|
@@ -84,7 +84,7 @@ iniciar_sistema.bat
 | `iniciar_sistema_unico.bat` | Inicia apenas o agente |
 | `parar_sistema.bat` | Para todos os processos |
 
-## 🎯 Exemplos de Uso
+## Exemplos de Uso
 
 Após iniciar o sistema, digite no Agente IA:
 
