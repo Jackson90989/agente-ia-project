@@ -204,12 +204,12 @@ app.register_blueprint(novo_bp, url_prefix='/api/novo')
 
 ## Benefícios da Arquitetura
 
-✅ **Separação de Responsabilidades** - Cada camada tem uma função clara
-✅ **Reutilização** - Services podem ser usados por múltiplas rotas
-✅ **Testabilidade** - Services podem ser testados isoladamente
-✅ **Manutenibilidade** - Código organizado e fácil de encontrar
-✅ **Escalabilidade** - Fácil adicionar novos features
-✅ **Segurança** - Validações e tratamento de erros centralizados
+**Separação de Responsabilidades** - Cada camada tem uma função clara
+**Reutilização** - Services podem ser usados por múltiplas rotas
+**Testabilidade** - Services podem ser testados isoladamente
+**Manutenibilidade** - Código organizado e fácil de encontrar
+**Escalabilidade** - Fácil adicionar novos features
+**Segurança** - Validações e tratamento de erros centralizados
 
 ## Migrando Código Existente
 
