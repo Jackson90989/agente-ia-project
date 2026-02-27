@@ -94,7 +94,7 @@ python test_connection.py
 - `POST /` - Endpoint JSON-RPC para chamadas de ferramentas
 - `POST /mcp` - Endpoint SSE para MCP nativo
 
-## ⚙️ Configurações
+## Configurações
 
 ### agente_ia_inteligente.py
 ```python
