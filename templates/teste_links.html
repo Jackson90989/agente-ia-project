@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Portal JavaScript</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .test-item { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        .pass { background: #9f9; }
+        .fail { background: #f99; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Teste: Simulando getLinksRequerimento do Portal</h1>
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+
+        // Mesma função do portal
+        function getLinksRequerimento(req) {
+            console.log("getLinksRequerimento called with:", req);
+            let links = '';
+            
+            if (req.tipo === 'declaracao' && req.declaracao_info && req.declaracao_info.pdf_path) {
+                links += `
+                    <a href="${API_BASE}/requerimentos/${req.id}/pdf" download>
+                         Baixar PDF
+                    </a>
+                    <a href="${API_BASE}/requerimentos/${req.id}/visualizar-pdf" target="_blank">
+                         Visualizar
+                    </a>
+                `;
+            }
+            
+            if (!links) {
+                links = '<span style="font-size: 12px; color: #999;">Nenhum arquivo disponível</span>';
+            }
+            
+            return links;
+        }
+
+        // Dados que a API retorna
+        const mockRequerimentos = [
+            {
+                "id": 17,
+                "aluno_id": 1,
+                "aluno_nome": "João Pedro Silva",
+                "tipo": "declaracao",
+                "status": "pendente",
+                "data_solicitacao": "2026-02-23 23:14:34",
+                "data_processamento": null,
+                "descricao": "Solicitação de declaração de frequencia",
+                "observacoes": null,
+                "materia_id": null,
+                "materia_nome": null,
+                "declaracao_info": {
+                    "tipo": "frequencia",
+                    "assinatura": "Secretaria Acadêmica",
+                    "data_assinatura": "2026-02-23",
+                    "pdf_path": "declaracoes\\declaracao_2024_00001_frequencia_20260223201434.pdf"
+                },
+                "boleto_info": null
+            },
+            {
+                "id": 16,
+                "aluno_id": 1,
+                "aluno_nome": "João Pedro Silva",
+                "tipo": "declaracao",
+                "status": "pendente",
+                "data_solicitacao": "2026-02-23 23:13:31",
+                "data_processamento": null,
+                "descricao": "Solicitação de declaração de matricula",
+                "observacoes": null,
+                "materia_id": null,
+                "materia_nome": null,
+                "declaracao_info": {
+                    "tipo": "matricula",
+                    "assinatura": "Secretaria Acadêmica",
+                    "data_assinatura": "2026-02-23",
+                    "pdf_path": "declaracoes\\declaracao_2024_00001_matricula_20260223201331.pdf"
+                },
+                "boleto_info": null
+            },
+            {
+                "id": 14,
+                "aluno_id": 1,
+                "aluno_nome": "João Pedro Silva",
+                "tipo": "declaracao",
+                "status": "concluido",
+                "data_solicitacao": "2026-02-11 19:57:41",
+                "data_processamento": "2026-02-14 19:57:41",
+                "descricao": "Requisição de declaracao",
+                "observacoes": null,
+                "materia_id": null,
+                "materia_nome": null,
+                "declaracao_info": {
+                    "tipo": "conclusao",
+                    "assinatura": "Secretaria Acadêmica",
+                    "data_assinatura": "2026-02-23",
+                    "pdf_path": null
+                },
+                "boleto_info": null
+            }
+        ];
+
+        // Executar testes
+        function runTests() {
+            const resultsDiv = document.getElementById('results');
+            let html = '';
+
+            mockRequerimentos.forEach(req => {
+                const links = getLinksRequerimento(req);
+                const hasLinks = !links.includes('Nenhum arquivo disponível');
+                const testClass = hasLinks ? 'pass' : 'fail';
+                
+                html += `
+                    <div class="test-item ${testClass}">
+                        <h3>Requerimento #${req.id}</h3>
+                        <p><strong>Tipo:</strong> ${req.tipo}</p>
+                        <p><strong>Declaração tipo:</strong> ${req.declaracao_info?.tipo}</p>
+                        <p><strong>PDF path:</strong> ${req.declaracao_info?.pdf_path || 'null'}</p>
+                        <p><strong>Verifica tipo === 'declaracao':</strong> ${req.tipo === 'declaracao'}</p>
+                        <p><strong>Verifica declaracao_info existe:</strong> ${!!req.declaracao_info}</p>
+                        <p><strong>Verifica pdf_path existe:</strong> ${!!req.declaracao_info?.pdf_path}</p>
+                        <p><strong>Resultado da função getLinksRequerimento:</strong></p>
+                        <div style="border: 1px solid #999; padding: 10px; background: white;">
+                            ${links}
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsDiv.innerHTML = html;
+        }
+
+        // Rodar testes quando a página carregar
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

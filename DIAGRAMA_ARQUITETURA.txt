@@ -1,0 +1,180 @@
+```
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                    NOVA ARQUITETURA - AgenteIA v2.0                           ║
+║                     Organização Modular em Camadas                            ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+┌─ REQUISIÇÃO HTTP ─────────────────────────────────────────────────────────────┐
+│                                                                               │
+│  GET /api/alunos/1                                                          │
+│  POST /api/requerimentos                                                    │
+│  PUT /api/pagamentos/:id                                                    │
+└───────────────────────────────────────────────────────────────────────────────┘
+                                ↓
+             ┌──────────────────────────────────────┐
+             │    🌐 CAMADA DE ROTAS (routes/)     │
+             │                                      │
+             │  • alunos.py (159 linhas)           │
+             │  • auth.py (170 linhas)             │
+             │  • cursos.py (23 linhas)            │
+             │  • requerimentos.py (294 linhas)    │  ← Ainda em routes/
+             │                                      │    (compatibilidade)
+             │  Responsabilidades:                 │
+             │  ✓ Receber requisições HTTP         │
+             │  ✓ Validar entrada                  │
+             │  ✓ Chamar services                  │
+             │  ✓ Formatar resposta                │
+             └──────────────────────────────────────┘
+                                ↓
+             ┌──────────────────────────────────────┐
+             │   💼 CAMADA DE SERVIÇOS (services/)  │
+             │                                      │
+             │  • aluno_service.py (novo)          │
+             │  • auth_service.py (novo)           │
+             │  • curso_service.py (novo)          │
+             │  • matricula_service.py (novo)      │
+             │  • pagamento_service.py (67 linhas) │
+             │  • requerimento_service.py (213)    │
+             │  • mcp_integration.py (115 linhas)  │
+             │                                      │
+             │  Responsabilidades:                 │
+             │  ✓ Validar dados de negócio        │
+             │  ✓ Aplicar regras                   │
+             │  ✓ Transações BD                    │
+             │  ✓ Lógica complexa                  │
+             └──────────────────────────────────────┘
+                                ↓
+             ┌──────────────────────────────────────┐
+             │    📦 CAMADA DE MODELOS (models/)    │
+             │                                      │
+             │  • aluno.py (75 linhas)             │
+             │  • usuario.py (65 linhas)           │
+             │  • curso.py (35 linhas)             │
+             │  • materia.py (40 linhas)           │
+             │  • matricula.py (60 linhas)         │
+             │  • requerimento.py (75 linhas)      │
+             │  • pagamento.py (45 linhas)         │
+             │                                      │
+             │  Responsabilidades:                 │
+             │  ✓ Definir estrutura das dados     │
+             │  ✓ Relacionamentos                  │
+             │  ✓ Serialização (to_dict)          │
+             │  ✓ Validações de campo             │
+             └──────────────────────────────────────┘
+                                ↓
+                    ┌─────────────────────┐
+                    │  🗄️  BANCO DE DADOS  │
+                    │  (SQLite3)          │
+                    └─────────────────────┘
+
+┌─ SUPORTE (usado por todas as camadas) ────────────────────────────────────────┐
+│                                                                               │
+│  🔐 CORE (src/core/)           🛠️ UTILS (src/utils/)                        │
+│  ├── errors.py                 ├── constants.py                             │
+│  │   • ValidationError          │   • ALUNO_STATUS_ATIVO                    │
+│  │   • AuthenticationError       │   • REQUERIMENTO_STATUS_*                │
+│  │   • NotFoundError             │   • PAGAMENTO_STATUSES                   │
+│  │   • ConflictError             │   • MAX_SENHA_LENGTH                     │
+│  │   • DatabaseError             │                                         │
+│  │   • MCPError                  ├── validators.py                          │
+│  │   • PDFGenerationError        │   • validar_cpf()                        │
+│  │                               │   • validar_email()                      │
+│  ├── logger.py                  │   • validar_telefone()                   │
+│  │   • setup_logger()            │   • validar_senha()                      │
+│  │   • get_logger()              │                                         │
+│  │                               ├── formatters.py                          │
+│  ├── security.py                │   • formatar_cpf()                       │
+│  │   • generate_secure_token()   │   • formatar_telefone()                 │
+│  │   • hash_password()           │   • formatar_data()                     │
+│  │   • verify_password()         │   • formatar_moeda()                    │
+│  │   • generate_code()           │                                         │
+│  │   • generate_numeric_code()   ├── helpers.py                             │
+│  │                               │   • criar_resposta_json()                │
+│  ├── pdf_generator.py           │   • paginar_lista()                      │
+│  │   • gerar_declaracao_pdf()    │   • gerar_matricula()                    │
+│  │                               │   • calcular_idade()                     │
+│  │                               │                                         │
+│  │                               ├── decorators.py                          │
+│  │                               │   • @requer_autenticacao                 │
+│  │                               │   • @requer_admin                        │
+│  │                               │   • @requer_funcionario                  │
+│  │                                                                          │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                           📊 ANTES vs DEPOIS                                   ║
+╠════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  ANTES:                          │  DEPOIS:                                   ║
+║  ─────────────────────────────   │  ─────────────────────────────             ║
+║  ❌ app.py (59 linhas)            │  ✅ app.py (59 linhas)                    ║
+║  ❌ models.py (320 linhas!)       │  ✅ src/models/ (8 arquivos, 475 linhas)  ║
+║  ❌ Validação em routes/          │  ✅ src/utils/validators.py              ║
+║  ❌ Exception genérica            │  ✅ src/core/errors.py (10 tipos)        ║
+║  ❌ logging.getLogger() manual     │  ✅ src/core/get_logger()                ║
+║  ❌ Constantes espalhadas         │  ✅ src/utils/constants.py               ║
+║  ❌ Formatação em routes/         │  ✅ src/utils/formatters.py              ║
+║  ❌ agente_ia: 2158 linhas        │  ✅ Pronto para dividir                   ║
+║  ❌ mcp: 1535 linhas              │  ✅ em 3 arquivos ~600 linhas            ║
+║                                  │                                           ║
+║  📈 Complexidade Ciclomática      │  📉 Muito melhorada                       ║
+║  🔴 Difícil encontrar código      │  🟢 Localização imediata                  ║
+║  🔴 Hard-coded em vários lugares  │  🟢 Centralizado (constants)             ║
+║  🔴 Teste = Integração            │  🟢 Unit test + Integration               ║
+║  🔴 Equipe = Conflitos            │  🟢 Trabalho paralelo                     ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                        💻 EXEMPLO DE FLUXO PRÁTICO                             ║
+╠════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  1️⃣  Usuário faz requisição:                                                   ║
+║     POST /api/requerimentos/declaracao                                         ║
+║     {                                                                          ║
+║       "aluno_id": 1,                                                           ║
+║       "tipo": "frequencia"                                                     ║
+║     }                                                                          ║
+║                                                                                ║
+║  2️⃣  routes/requerimentos.py recebe:                                           ║
+║     @requerimentos_bp.route('/declaracao', methods=['POST'])                    ║
+║     def criar_declaracao():                                                    ║
+║         data = request.get_json()                                              ║
+║         validar_campos_obrigatorios(data, ['aluno_id', 'tipo'])  ← utils/     ║
+║         requerimento = RequerimentoService.criar(data)  ← chama service       ║
+║         return jsonify(requerimento.to_dict()), 201                            ║
+║                                                                                ║
+║  3️⃣  services/requerimento_service.py executa lógica:                          ║
+║     def criar(dados):                                                          ║
+║         if not Aluno.query.get(dados['aluno_id']):                             ║
+║             raise NotFoundError("Aluno não encontrado")  ← core/errors        ║
+║         req = Requerimento(...)  ← models/requerimento.py                     ║
+║         gerar_pdf = gerar_declaracao_pdf(...)  ← core/pdf_generator          ║
+║         db.session.add(req)                                                    ║
+║         db.session.commit()  ← transação                                       ║
+║         logger.info(f"Requerimento criado: {req.id}")  ← core/logger          ║
+║         return req                                                             ║
+║                                                                                ║
+║  4️⃣  models/requerimento.py serializa:                                         ║
+║     def to_dict(self):                                                         ║
+║         return {                                                               ║
+║             'id': self.id,                                                     ║
+║             'aluno_nome': self.aluno.nome_completo,  ← relacionamento         ║
+║             'declaracao_info': { ... }  ← estrutura definida                  ║
+║         }                                                                       ║
+║                                                                                ║
+║  5️⃣  Resposta enviada ao cliente:                                              ║
+║     200 OK                                                                     ║
+║     {                                                                          ║
+║       "id": 19,                                                                ║
+║       "aluno_nome": "João Silva",                                              ║
+║       "declaracao_info": {                                                      ║
+║         "tipo": "frequencia",                                                   ║
+║         "pdf_path": "declaracoes/..."                                          ║
+║       }                                                                        ║
+║     }                                                                          ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+✨ RESULTADO: Código claro, testável, manutenível e escalável!
+```

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Declaração Escolar</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 2.5cm 2cm 2cm 2cm;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 20px;
+        }
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003366;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .school-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .document-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 30px 0;
+            text-transform: uppercase;
+            color: #003366;
+            border-bottom: 1px dashed #999;
+            padding-bottom: 10px;
+        }
+        .declaration-number {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .content {
+            text-align: justify;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+        .student-data {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #003366;
+        }
+        .student-data p {
+            margin: 8px 0;
+        }
+        .student-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #003366;
+        }
+        .signature-section {
+            margin-top: 60px;
+        }
+        .signature-line {
+            width: 50%;
+            border-top: 1px solid #000;
+            margin: 0 auto 5px auto;
+        }
+        .signature-text {
+            text-align: center;
+            font-size: 14px;
+        }
+        .date {
+            text-align: right;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .digital-signature {
+            margin-top: 40px;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px dotted #ccc;
+            padding-top: 10px;
+            text-align: center;
+        }
+        .validation-code {
+            font-family: monospace;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        table.info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table.info-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        table.info-table td.label {
+            font-weight: bold;
+            background-color: #f5f5f5;
+            width: 30%;
+        }
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            color: rgba(200, 200, 200, 0.1);
+            white-space: nowrap;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark">DOCUMENTO OFICIAL</div>
+    
+    <div class="header">
+        <div class="school-name">INSTITUTO DE EDUCAÇÃO EXEMPLAR</div>
+        <div class="school-info">
+            CNPJ: 00.000.000/0001-00 | Credenciamento: Portaria nº 123/2020<br>
+            Rua das Escolas, 123 - Centro - Cidade/UF - CEP: 00000-000<br>
+            Tel: (00) 0000-0000 | E-mail: contato@escolaexemplar.edu.br
+        </div>
+    </div>
+
+    <div class="declaration-number">
+        Declaração Nº {{ declaracao_numero }} - {{ ano_atual }}
+    </div>
+
+    <div class="document-title">
+        {{ tipo_declaracao }}
+    </div>
+
+    <div class="date">
+        {{ cidade }}, {{ data_extenso }}
+    </div>
+
+    <div class="content">
+        <p>Declaramos para os devidos fins que <span class="student-name">{{ aluno.nome }}</span>, 
+        portador(a) do CPF nº {{ aluno.cpf }}{% if aluno.rg %}, RG nº {{ aluno.rg }}{% endif %}, 
+        nascido(a) em {{ aluno.data_nascimento|date('d/m/Y') }}, 
+        está regularmente matriculado(a) nesta instituição de ensino sob o número de matrícula 
+        <strong>{{ aluno.matricula }}</strong>.</p>
+
+        <div class="student-data">
+            <p><strong>Dados Acadêmicos:</strong></p>
+            <p><strong>Curso:</strong> {{ aluno.curso }}</p>
+            <p><strong>Turma:</strong> {{ aluno.turma }}</p>
+            <p><strong>Período:</strong> {{ aluno.periodo }}</p>
+            <p><strong>Ano de Ingresso:</strong> {{ aluno.ano_ingresso }}</p>
+            <p><strong>Status:</strong> {{ aluno.status }}</p>
+        </div>
+
+        {% if tipo_declaracao == 'DECLARAÇÃO DE MATRÍCULA' %}
+            <p>O(a) aluno(a) encontra-se regularmente matriculado(a) no {{ aluno.semestre_atual }}º semestre letivo, 
+            com previsão de conclusão para {{ aluno.data_previsao_conclusao|date('d/m/Y') }}.</p>
+            
+            <p><strong>Disciplinas Cursadas no Semestre Atual:</strong></p>
+            <table class="info-table">
+                <tr>
+                    <th>Código</th>
+                    <th>Disciplina</th>
+                    <th>Carga Horária</th>
+                    <th>Professor</th>
+                </tr>
+                {% for materia in materias_atual %}
+                <tr>
+                    <td>{{ materia.codigo }}</td>
+                    <td>{{ materia.nome }}</td>
+                    <td>{{ materia.carga_horaria }}h</td>
+                    <td>{{ materia.professor }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+        {% elif tipo_declaracao == 'DECLARAÇÃO DE FREQUÊNCIA' %}
+            <p>O(a) aluno(a) apresentou frequência de <strong>{{ aluno.frequencia }}%</strong> 
+            no período de {{ periodo_inicio|date('d/m/Y') }} a {{ periodo_fim|date('d/m/Y') }}, 
+            estando apto(a) a prosseguir com seus estudos regulares.</p>
+            
+            <table class="info-table">
+                <tr>
+                    <th>Disciplina</th>
+                    <th>Frequência</th>
+                    <th>Situação</th>
+                </tr>
+                {% for materia in frequencias %}
+                <tr>
+                    <td>{{ materia.nome }}</td>
+                    <td>{{ materia.frequencia }}%</td>
+                    <td>{{ materia.situacao }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+        {% elif tipo_declaracao == 'DECLARAÇÃO DE CONCLUSÃO' %}
+            <p>Declaramos que o(a) aluno(a) concluiu integralmente o Curso de {{ aluno.curso }}, 
+            com carga horária total de {{ aluno.carga_horaria_total }} horas, 
+            tendo obtido aproveitamento satisfatório em todas as disciplinas do currículo.</p>
+            
+            <p><strong>Média Global:</strong> {{ aluno.media_global }}</p>
+            
+            <p>Está apto(a) a receber seu Certificado de Conclusão de Curso, 
+            mediante apresentação dos documentos necessários e quitação de todas as obrigações financeiras.</p>
+            
+        {% elif tipo_declaracao == 'DECLARAÇÃO DE VÍNCULO' %}
+            <p>Declaramos que o(a) aluno(a) mantém vínculo ativo com esta instituição de ensino 
+            desde {{ aluno.data_matricula|date('d/m/Y') }}, estando regularmente matriculado(a) 
+            e frequentando as atividades acadêmicas do curso.</p>
+            
+            <p>Esta declaração é emitida para fins de estágio, comprovação de vínculo estudantil 
+            ou outros fins que se fizerem necessários.</p>
+        {% endif %}
+
+        <p>Por ser expressão da verdade, firmamos a presente declaração para que produza os efeitos legais.</p>
+    </div>
+
+    <div class="signature-section">
+        <div class="date">
+            {{ cidade }}, {{ data_extenso }}
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px;">
+            <div class="signature-line"></div>
+            <div class="signature-text">
+                <strong>{{ secretario_nome }}</strong><br>
+                Secretário(a) Acadêmico(a)<br>
+                Matrícula: {{ secretario_matricula }}
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <div class="signature-line"></div>
+            <div class="signature-text">
+                <strong>{{ coordenador_nome }}</strong><br>
+                Coordenador(a) Pedagógico(a)<br>
+                Matrícula: {{ coordenador_matricula }}
+            </div>
+        </div>
+    </div>
+
+    <div class="digital-signature">
+        <p><strong>Documento assinado digitalmente</strong></p>
+        <p>Código de validação: <span class="validation-code">{{ codigo_validacao }}</span></p>
+        <p>Este documento pode ter sua autenticidade verificada em: https://www.escolaexemplar.edu.br/validar</p>
+        <p>Data e hora da emissão: {{ data_hora_emissao|date('d/m/Y H:i:s') }}</p>
+        <p>IP de emissão: {{ ip_emissao }}</p>
+    </div>
+
+    <div class="footer">
+        <p>Instituição credenciada pelo MEC - Portaria nº 123/2020 - DOU 01/01/2020</p>
+        <p>Documento válido em todo território nacional - Proibida a reprodução parcial ou total</p>
+    </div>
+</body>
+</html>
