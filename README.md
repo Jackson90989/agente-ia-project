@@ -43,7 +43,7 @@ python agente_ia_inteligente.py
 - **Opcional:** Ollama com modelo llama3.2:3b para LLM
   - Se não disponível, o sistema usa análise baseada em palavras-chave
 
-## 🔧 Funcionalidades
+## Funcionalidades
 
 ### Ferramentas Disponíveis:
 
